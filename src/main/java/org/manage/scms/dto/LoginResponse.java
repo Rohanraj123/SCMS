@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthDto
+public class LoginResponse
 {
-    private String username;
-    private String password;
+    private String token;
+    private long expiresIn;
 }

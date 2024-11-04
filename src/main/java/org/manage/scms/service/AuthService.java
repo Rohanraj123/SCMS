@@ -32,17 +32,14 @@ public class AuthService
         return user;
     }
 
-
     public User loginUser(AuthDto authDto)
     {
-        User user = userRepository.findByUsername(authDto.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        User user = userRepository.findByUsername(authDto.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
         String reqPassword = authDto.getPassword();
         boolean matches = bCryptPasswordEncoder.matches(reqPassword, user.getPassword());
-        if (matches) {
-            return user;
-        }
+        if (matches) return user;
+
         return null;
     }
 }
