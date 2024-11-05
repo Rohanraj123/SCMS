@@ -9,6 +9,10 @@ import org.manage.scms.service.AuthService;
 import org.manage.scms.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,8 @@ public class UserController
 {
     private final AuthService authService;
     private final JwtService jwtService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     public UserController(AuthService authService, JwtService jwtService)
@@ -41,21 +47,17 @@ public class UserController
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody AuthDto authDto)
+    public String login(@RequestBody User user)
     {
-        try
-        {
-             User authenticatedUser = authService.loginUser(authDto);
-             String jwtToken = jwtService.generateToken(authenticatedUser);
-             LoginResponse loginResponse = new LoginResponse();
-             loginResponse.setToken(jwtToken);
-             loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+        );
 
-             return ResponseEntity.ok(loginResponse);
-        }
-        catch (UsernameNotFoundException e)
-        {
-            return ResponseEntity.badRequest().body(null);
+        if (authentication.isAuthenticated()) {
+            String jwtToken = jwtService.generateToken(user);
+            return "Bearer " + jwtToken;
+        } else {
+            throw new RuntimeException("Invalid credentials");
         }
     }
 }
