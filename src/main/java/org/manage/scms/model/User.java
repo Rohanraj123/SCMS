@@ -2,10 +2,12 @@ package org.manage.scms.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.manage.scms.constant.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,6 +26,10 @@ public class User implements UserDetails
     private String password;
     @Column(unique = true)
     private String email;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
