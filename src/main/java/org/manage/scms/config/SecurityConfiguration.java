@@ -24,7 +24,7 @@ public class SecurityConfiguration
     {
         httpSecurity
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/authenticate").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/manager/**").hasRole("MANAGER")
                         .requestMatchers("/api/manager/**").hasRole("USER")
@@ -36,6 +36,4 @@ public class SecurityConfiguration
 
         return httpSecurity.build();
     }
-
-
 }
