@@ -18,7 +18,7 @@ public class AuthService
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User registerUser(AuthDto authDto) throws UserAlreadyExistsException
+    public User register(AuthDto authDto) throws UserAlreadyExistsException
     {
         if (userRepository.findByUsername(authDto.getUsername()).isPresent())
         {
@@ -32,7 +32,7 @@ public class AuthService
         return user;
     }
 
-    public User loginUser(AuthDto authDto)
+    public User authenticate(AuthDto authDto)
     {
         User user = userRepository.findByUsername(authDto.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 

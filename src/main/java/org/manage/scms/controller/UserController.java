@@ -33,7 +33,7 @@ public class UserController
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody AuthDto authDto)
+    public ResponseEntity<String> register(@RequestBody AuthDto authDto)
     {
         try
         {
@@ -46,8 +46,8 @@ public class UserController
         }
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody User user)
+    @PostMapping("/authenticate")
+    public String authenticate(@RequestBody User user)
     {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
