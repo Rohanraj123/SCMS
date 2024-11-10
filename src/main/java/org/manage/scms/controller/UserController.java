@@ -37,7 +37,7 @@ public class UserController
     {
         try
         {
-            User user = authService.registerUser(authDto);
+            User user = authService.register(authDto);
             return ResponseEntity.ok("User " + user.getUsername() + " is registered!");
         }
         catch (UserAlreadyExistsException e)
