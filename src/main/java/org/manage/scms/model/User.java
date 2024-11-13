@@ -30,6 +30,10 @@ public class User implements UserDetails
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<Role> roles;
 
     @Override
