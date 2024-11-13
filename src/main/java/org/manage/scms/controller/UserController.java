@@ -2,6 +2,7 @@ package org.manage.scms.controller;
 
 import io.jsonwebtoken.Jwt;
 import org.manage.scms.dto.AuthDto;
+import org.manage.scms.dto.LogInResponse;
 import org.manage.scms.dto.LoginResponse;
 import org.manage.scms.exception.UserAlreadyExistsException;
 import org.manage.scms.model.User;
@@ -47,17 +48,34 @@ public class UserController
     }
 
     @PostMapping("/authenticate")
-    public String authenticate(@RequestBody User user)
+    public ResponseEntity<LogInResponse> authenticate(@RequestBody AuthDto authDto)
     {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-        );
+        try
+        {
+            User user = authService.authenticate(authDto);
+            if (user != null)
+            {
+                String jwtToken = jwtService.generateToken(user);
+                LogInResponse logInResponse = new LogInResponse();
+                logInResponse.setExpiresIn(jwtService.getExpirationTime());
+                logInResponse.setToken(jwtToken);
 
-        if (authentication.isAuthenticated()) {
-            String jwtToken = jwtService.generateToken(user);
-            return "Bearer " + jwtToken;
-        } else {
-            throw new RuntimeException("Invalid credentials");
+                return ResponseEntity.ok(logInResponse);
+            }
+            return ResponseEntity.badRequest().body(null);
         }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    public User convertDtoToUser(AuthDto authDto)
+    {
+        User user = new User();
+        user.setPassword(authDto.getPassword());
+        user.setUsername(authDto.getUsername());
+
+        return user;
     }
 }
