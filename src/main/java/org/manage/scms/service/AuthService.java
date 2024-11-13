@@ -27,6 +27,8 @@ public class AuthService
         User user = new User();
         user.setUsername(authDto.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(authDto.getPassword()));
+        user.setEmail(authDto.getEmail());
+        user.setRoles(authDto.getRoles());
 
         userRepository.save(user);
         return user;
