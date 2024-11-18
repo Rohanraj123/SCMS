@@ -6,3 +6,6 @@ public enum Role
     MANAGER,
     USER
 }
+
+
+// 1. done. 2. see excallidraw and proceed furthur.
