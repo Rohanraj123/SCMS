@@ -3,7 +3,9 @@ package org.manage.scms.controller;
 import org.manage.scms.dto.ProductDto;
 import org.manage.scms.service.ProductService;
 import org.manage.scms.model.Product;
+import org.manage.scms.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +23,16 @@ public class ProductController
         this.productService = productService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addProduct")
     public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto)
     {
         try {
-            Product product = convertDtoToProduct(productDto);
-            return ResponseEntity.ok(productService.addProduct(product));
+            if (AuthUtil.hasRole("ADMIN")) {
+                Product product = convertDtoToProduct(productDto);
+                return ResponseEntity.ok(productService.addProduct(product));
+            }
+            return ResponseEntity.badRequest().body(null);
         }
         catch (Exception e)
         {
@@ -34,8 +40,19 @@ public class ProductController
         }
     }
 
+    @PostMapping("/deleteProducts")
+    public ResponseEntity<String> deleteProducts(@RequestParam Boolean status)
+    {
+        if (status)
+        {
+            productService.deleteProducts();
+            return ResponseEntity.ok("Product deleted successfully");
+        }
+        return ResponseEntity.badRequest().body("Unexpected error occurred!");
+    }
+
     @PostMapping("/deleteProductById")
-    public ResponseEntity<String> deleteProduct(@RequestParam Long id)
+    public ResponseEntity<String> deleteProductById(@RequestParam Long id)
     {
         try
         {

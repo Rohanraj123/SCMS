@@ -27,6 +27,11 @@ public class ProductService
         return null;
     }
 
+    public void deleteProducts()
+    {
+        productRepository.deleteAll();
+    }
+
     public void deleteProductById(Long id) throws Exception
     {
         productRepository.findById(id)
