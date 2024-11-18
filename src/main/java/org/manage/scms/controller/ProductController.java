@@ -5,6 +5,7 @@ import org.manage.scms.service.ProductService;
 import org.manage.scms.model.Product;
 import org.manage.scms.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ProductController
         this.productService = productService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addProduct")
     public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto)
     {
