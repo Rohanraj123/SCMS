@@ -1,9 +1,8 @@
 package org.manage.scms.controller;
 
-import io.jsonwebtoken.Jwt;
 import org.manage.scms.dto.AuthDto;
-import org.manage.scms.dto.LogInResponse;
 import org.manage.scms.dto.LoginResponse;
+import org.manage.scms.dto.RegisterDto;
 import org.manage.scms.exception.UserAlreadyExistsException;
 import org.manage.scms.model.User;
 import org.manage.scms.service.AuthService;
@@ -11,10 +10,6 @@ import org.manage.scms.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,11 +29,11 @@ public class UserController
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthDto authDto)
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto)
     {
         try
         {
-            User user = authService.register(authDto);
+            User user = authService.register(registerDto);
             return ResponseEntity.ok("User " + user.getUsername() + " is registered!");
         }
         catch (UserAlreadyExistsException e)
@@ -48,34 +43,21 @@ public class UserController
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<LogInResponse> authenticate(@RequestBody AuthDto authDto)
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody AuthDto authDto)
     {
         try
         {
-            User user = authService.authenticate(authDto);
-            if (user != null)
-            {
-                String jwtToken = jwtService.generateToken(user);
-                LogInResponse logInResponse = new LogInResponse();
-                logInResponse.setExpiresIn(jwtService.getExpirationTime());
-                logInResponse.setToken(jwtToken);
+            String token = authService.authenticate(authDto);
+            LoginResponse logInResponse = new LoginResponse();
 
-                return ResponseEntity.ok(logInResponse);
-            }
-            return ResponseEntity.badRequest().body(null);
+            logInResponse.setExpiresIn(jwtService.getExpirationTime());
+            logInResponse.setToken(token);
+
+            return ResponseEntity.ok(logInResponse);
         }
         catch (Exception e)
         {
             return ResponseEntity.badRequest().body(null);
         }
-    }
-
-    public User convertDtoToUser(AuthDto authDto)
-    {
-        User user = new User();
-        user.setPassword(authDto.getPassword());
-        user.setUsername(authDto.getUsername());
-
-        return user;
     }
 }
