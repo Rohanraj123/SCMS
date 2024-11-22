@@ -17,4 +17,12 @@ public class ProductUtil
 
         return product;
     }
+
+    public static void entityToDtoSetter(Product entity, ProductDto dto) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setQuantity(dto.getQuantity());
+        entity.setSupplier(dto.getSupplier());
+    }
 }
