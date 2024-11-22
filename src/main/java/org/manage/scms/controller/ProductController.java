@@ -6,6 +6,7 @@ import org.manage.scms.model.Product;
 import org.manage.scms.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -80,16 +81,37 @@ public class ProductController
     }
 
     @GetMapping("/getProductById")
-    public ResponseEntity<Product> getProductById(@RequestParam Long id) {
-        try {
+    public ResponseEntity<Product> getProductById(@RequestParam Long id)
+    {
+        try
+        {
             Product product = productService.getProductById(id);
-            if (product != null) {
+            if (product != null)
+            {
                 return ResponseEntity.ok(product);
-            } else {
+            }
+            else
+            {
                 return ResponseEntity.badRequest().body(null);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/updateProduct")
+    public ResponseEntity<String> updateProduct(@RequestParam Long id, @RequestBody ProductDto productDto)
+    {
+        try
+        {
+            productService.updateProduct(productDto, id);
+            return ResponseEntity.ok("Product updated successfully!");
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body("Some internal error!");
         }
     }
 }
