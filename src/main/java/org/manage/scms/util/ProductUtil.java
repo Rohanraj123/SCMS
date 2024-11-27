@@ -18,6 +18,19 @@ public class ProductUtil
         return product;
     }
 
+    public static ProductDto convertProductToDto(Product product)
+    {
+        ProductDto productDto = new ProductDto();
+
+        productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setSupplier(product.getSupplier());
+        productDto.setQuantity(product.getQuantity());
+        productDto.setPrice(product.getPrice());
+
+        return productDto;
+    }
+
     public static void entityToDtoSetter(Product entity, ProductDto dto) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());

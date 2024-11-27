@@ -3,8 +3,10 @@ package org.manage.scms.service;
 import org.manage.scms.dto.ProductDto;
 import org.manage.scms.exception.ProductNotFoundException;
 import org.manage.scms.model.Product;
+import org.manage.scms.notifications.ProductAddedEvent;
 import org.manage.scms.repository.ProductRepository;
 import org.manage.scms.util.ProductUtil;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +17,24 @@ public class ProductService
 {
     private final String EXCEPTION_EXPRESSION = "Product not found by ID: ";
     private final ProductRepository productRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ProductService(ProductRepository productRepository)
+    public ProductService(ProductRepository productRepository, ApplicationEventPublisher eventPublisher)
     {
         this.productRepository = productRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public Product addProduct(Product product)
     {
         if (product != null)
         {
-            return productRepository.save(product);
+            ProductDto productDto = ProductUtil.convertProductToDto(product);
+            ProductAddedEvent event = new ProductAddedEvent(this, product.getName(), productDto);
+            eventPublisher.publishEvent(event);
+
+            productRepository.save(product);
+            return product;
         }
         return null;
     }
