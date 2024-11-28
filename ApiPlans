@@ -30,20 +30,6 @@ Endpoint: PUT /api/inventory/{productId}
 Track Stock Levels: Monitor low stock and trigger restocking alerts.
 Endpoint: GET /api/inventory/low-stock
 
-
-5. Customer Management APIs
-Add Customer: Add new customer to the system.
-Endpoint: POST /api/customers
-Update Customer: Update customer details.
-Endpoint: PUT /api/customers/{id}
-Delete Customer: Remove a customer from the system.
-Endpoint: DELETE /api/customers/{id}
-Get Customer Details: Fetch customer details.
-Endpoint: GET /api/customers/{id}
-List All Customers: List all customers.
-Endpoint: GET /api/customers
-
-
 6. Shipment/Delivery Management APIs
 Create Shipment: Create a new shipment for an order.
 Endpoint: POST /api/shipments

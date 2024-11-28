@@ -3,10 +3,9 @@ package org.manage.scms.util;
 import org.manage.scms.dto.ProductDto;
 import org.manage.scms.model.Product;
 
-public class ProductUtil
-{
-    public static Product convertDtoToProduct(ProductDto productDto)
-    {
+public class ProductUtil {
+
+    public static Product convertDtoToProduct(ProductDto productDto) {
         Product product = new Product();
 
         product.setName(productDto.getName());
@@ -18,8 +17,7 @@ public class ProductUtil
         return product;
     }
 
-    public static ProductDto convertProductToDto(Product product)
-    {
+    public static ProductDto convertProductToDto(Product product) {
         ProductDto productDto = new ProductDto();
 
         productDto.setName(product.getName());

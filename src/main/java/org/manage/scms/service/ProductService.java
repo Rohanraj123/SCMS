@@ -13,22 +13,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductService
-{
+public class ProductService {
+
     private final String EXCEPTION_EXPRESSION = "Product not found by ID: ";
     private final ProductRepository productRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    public ProductService(ProductRepository productRepository, ApplicationEventPublisher eventPublisher)
-    {
+    public ProductService(ProductRepository productRepository, ApplicationEventPublisher eventPublisher) {
         this.productRepository = productRepository;
         this.eventPublisher = eventPublisher;
     }
 
-    public Product addProduct(Product product)
-    {
-        if (product != null)
-        {
+    public Product addProduct(Product product) {
+
+        if (product != null) {
             ProductDto productDto = ProductUtil.convertProductToDto(product);
             ProductAddedEvent event = new ProductAddedEvent(this, product.getName(), productDto);
             eventPublisher.publishEvent(event);
@@ -39,25 +37,21 @@ public class ProductService
         return null;
     }
 
-    public void deleteProducts()
-    {
+    public void deleteProducts() {
         productRepository.deleteAll();
     }
 
-    public void deleteProductById(Long id) throws Exception
-    {
+    public void deleteProductById(Long id) throws Exception {
         productRepository.findById(id)
                 .orElseThrow(() -> new ExpressionException(EXCEPTION_EXPRESSION + id));
         productRepository.deleteById(id);
     }
 
-    public List<Product> getAllProducts()
-    {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    public Product getProductById(Long id)
-    {
+    public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ExpressionException(EXCEPTION_EXPRESSION + id));
     }

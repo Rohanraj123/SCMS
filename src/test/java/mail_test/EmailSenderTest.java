@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.manage.scms.constant.Role;
 import org.manage.scms.dto.ProductDto;
+import org.manage.scms.model.Supplier;
 import org.manage.scms.model.User;
 import org.manage.scms.notifications.ProductAddedEvent;
 import org.manage.scms.repository.UserRepository;
@@ -52,7 +53,7 @@ public class EmailSenderTest
         String description = "Lenovo ideapad 3";
         Integer quantity = 2;
         BigDecimal price = BigDecimal.valueOf(232213);
-        String supplier = "Rohan Raj";
+        Supplier supplier = new Supplier();
 
         ProductDto productDto = new ProductDto(name, description, quantity, price, supplier);
 

@@ -4,18 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.manage.scms.model.Supplier;
+import org.manage.scms.model.Product;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+@AllArgsConstructor
+public class SupplierDto {
     private String name;
-    private String description;
-    private Integer quantity;
-    private BigDecimal price;
-    private Supplier supplier;
+    private BigDecimal phoneNumber;
+    private String address;
+    private String email;
+    private Set<Product> products;
 }
