@@ -32,6 +32,7 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column
-    private String supplier;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false)
+    private Supplier supplier;
 }
