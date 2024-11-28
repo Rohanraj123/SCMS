@@ -14,19 +14,16 @@ import static org.manage.scms.util.ProductUtil.convertDtoToProduct;
 
 @RestController
 @RequestMapping("/admin/product/")
-public class ProductController
-{
+public class ProductController {
     private final ProductService productService;
 
-    public ProductController(ProductService productService)
-    {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addProduct")
-    public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto)
-    {
+    public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto) {
         try {
             if (AuthUtil.hasRole("ADMIN")) {
                 Product product = convertDtoToProduct(productDto);
@@ -34,18 +31,14 @@ public class ProductController
                 return ResponseEntity.ok(storedProduct);
             }
             return ResponseEntity.badRequest().body(null);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @PostMapping("/deleteProducts")
-    public ResponseEntity<String> deleteProducts(@RequestParam Boolean status)
-    {
-        if (status)
-        {
+    public ResponseEntity<String> deleteProducts(@RequestParam Boolean status) {
+        if (status) {
             productService.deleteProducts();
             return ResponseEntity.ok("Product deleted successfully");
         }
@@ -53,64 +46,45 @@ public class ProductController
     }
 
     @PostMapping("/deleteProductById")
-    public ResponseEntity<String> deleteProductById(@RequestParam Long id)
-    {
-        try
-        {
+    public ResponseEntity<String> deleteProductById(@RequestParam Long id) {
+        try {
             productService.deleteProductById(id);
             return ResponseEntity.ok("Product with id: " + id + " deleted successfully!");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getLocalizedMessage());
         }
     }
 
     @GetMapping("/getAllProducts")
-    public ResponseEntity<List<Product>> getAllProducts()
-    {
-        try
-        {
+    public ResponseEntity<List<Product>> getAllProducts() {
+        try {
             List<Product> products = productService.getAllProducts();
             return ResponseEntity.ok(products);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @GetMapping("/getProductById")
-    public ResponseEntity<Product> getProductById(@RequestParam Long id)
-    {
-        try
-        {
+    public ResponseEntity<Product> getProductById(@RequestParam Long id) {
+        try {
             Product product = productService.getProductById(id);
-            if (product != null)
-            {
+            if (product != null) {
                 return ResponseEntity.ok(product);
-            }
-            else
-            {
+            } else {
                 return ResponseEntity.badRequest().body(null);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
     @PostMapping("/updateProduct")
-    public ResponseEntity<String> updateProduct(@RequestParam Long id, @RequestBody ProductDto productDto)
-    {
-        try
-        {
+    public ResponseEntity<String> updateProduct(@RequestParam Long id, @RequestBody ProductDto productDto) {
+        try {
             productService.updateProduct(productDto, id);
             return ResponseEntity.ok("Product updated successfully!");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("Some internal error!");
         }
     }

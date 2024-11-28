@@ -17,30 +17,26 @@ public class NotificationService {
 
     private final JavaMailSender javaMailSender;
 
-    public NotificationService(UserRepository userRepository, JavaMailSender javaMailSender)
-    {
+    public NotificationService(UserRepository userRepository, JavaMailSender javaMailSender) {
         this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
     }
 
     @EventListener
-    public void handleProductAddedEvent(ProductAddedEvent event) throws Exception
-    {
+    public void handleProductAddedEvent(ProductAddedEvent event) throws Exception {
         List<User> users = userRepository.findByRole(Role.USER);
 
         String message = "New product added: " + event.getProductName()
                  + "\nDetails: " + event.getProductDto();
 
-        for (User user : users)
-        {
+        for (User user : users) {
             sendNotification(message, user.getEmail(), event);
         }
     }
 
-    private void sendNotification(String message, String toEmail, ProductAddedEvent event) throws Exception
-    {
-        try
-        {
+    private void sendNotification(String message, String toEmail, ProductAddedEvent event) throws Exception {
+
+        try {
             SimpleMailMessage mail = new SimpleMailMessage();
             mail.setFrom("rajrohan88293@gmail.com");
             mail.setTo(toEmail);
@@ -48,9 +44,7 @@ public class NotificationService {
             mail.setText(message);
 
             javaMailSender.send(mail);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new Exception("Failed to send Email to " + toEmail + ": " + e.getMessage());
         }
     }

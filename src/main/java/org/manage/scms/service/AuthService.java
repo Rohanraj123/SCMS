@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthService
-{
+public class AuthService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -32,12 +32,12 @@ public class AuthService
     @Autowired
     private JwtService jwtService;
 
-    public User register(RegisterDto registerDto) throws UserAlreadyExistsException
-    {
-        if (userRepository.findByUsername(registerDto.getUsername()).isPresent())
-        {
+    public User register(RegisterDto registerDto) throws UserAlreadyExistsException {
+
+        if (userRepository.findByUsername(registerDto.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException("User already exists!");
         }
+
         User user = new User();
         user.setUsername(registerDto.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registerDto.getPassword()));
@@ -48,8 +48,8 @@ public class AuthService
         return user;
     }
 
-    public String authenticate(AuthDto authDto)
-    {
+    public String authenticate(AuthDto authDto) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword())
         );

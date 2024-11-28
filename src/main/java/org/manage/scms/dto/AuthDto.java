@@ -8,8 +8,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class AuthDto
-{
+public class AuthDto {
     private String username;
     private String password;
 }

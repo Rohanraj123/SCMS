@@ -14,39 +14,33 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UserController
-{
+public class UserController {
+
     private final AuthService authService;
     private final JwtService jwtService;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserController(AuthService authService, JwtService jwtService)
-    {
+    public UserController(AuthService authService, JwtService jwtService) {
         this.authService = authService;
         this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto)
-    {
-        try
-        {
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+        try {
             User user = authService.register(registerDto);
             return ResponseEntity.ok("User " + user.getUsername() + " is registered!");
-        }
-        catch (UserAlreadyExistsException e)
-        {
+        } catch (UserAlreadyExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody AuthDto authDto)
-    {
-        try
-        {
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody AuthDto authDto) {
+        try {
             String token = authService.authenticate(authDto);
             LoginResponse logInResponse = new LoginResponse();
 
@@ -54,9 +48,7 @@ public class UserController
             logInResponse.setToken(token);
 
             return ResponseEntity.ok(logInResponse);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
