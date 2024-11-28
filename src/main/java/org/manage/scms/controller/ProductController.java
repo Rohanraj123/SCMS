@@ -6,7 +6,6 @@ import org.manage.scms.model.Product;
 import org.manage.scms.util.AuthUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +30,8 @@ public class ProductController
         try {
             if (AuthUtil.hasRole("ADMIN")) {
                 Product product = convertDtoToProduct(productDto);
-                return ResponseEntity.ok(productService.addProduct(product));
+                Product storedProduct = productService.addProduct(product);
+                return ResponseEntity.ok(storedProduct);
             }
             return ResponseEntity.badRequest().body(null);
         }
